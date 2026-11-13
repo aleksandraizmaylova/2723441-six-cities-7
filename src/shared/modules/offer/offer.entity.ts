@@ -1,76 +1,62 @@
-import {defaultClasses, getModelForClass, prop} from '@typegoose/typegoose';
-import {AccommodationType, Amenity, City, Coordinates, Offer, User} from '../../types/index.js';
+import {defaultClasses, getModelForClass, modelOptions, prop } from '@typegoose/typegoose';
+import {AccommodationType, AccommodationTypes, Amenity, Cities, City, Coordinates, User} from '../../types/index.js';
 
 export interface OfferEntity extends defaultClasses.Base {}
 
-export class OfferEntity extends defaultClasses.TimeStamps implements Offer {
-  @prop({ required: true, default: '', unique: true })
-  public title: string;
+@modelOptions({
+  schemaOptions: {
+    collection: 'offers'
+  }
+})
+
+export class OfferEntity extends defaultClasses.TimeStamps {
+  @prop({ required: true, default: '' })
+  public title!: string;
 
   @prop({ required: true, default: '' })
-  public description: string;
+  public description!: string;
 
   @prop({ required: true })
-  public publishDate: Date;
+  public publishDate!: Date;
 
-  @prop({ required: true })
+  @prop({ required: true, enum: Cities, type: () => String })
   public city?: City;
 
   @prop({ required: true, default: '' })
-  public preview: string;
+  public preview!: string;
 
   @prop({ required: true, default: [] })
-  public photos: string[];
+  public photos!: string[];
 
   @prop({ required: true, default: false })
-  public isPremium: boolean;
+  public isPremium!: boolean;
 
   @prop({ required: true, default: 5 })
-  public rating: number;
+  public rating!: number;
 
-  @prop({ required: true })
+  @prop({ required: true, enum: AccommodationTypes, type: () => String })
   public accommodationType?: AccommodationType;
 
   @prop({ required: true, default: 1 })
-  public roomsCount: number;
+  public roomsCount!: number;
 
   @prop({ required: true, default: 1 })
-  public guestsCount: number;
+  public guestsCount!: number;
 
   @prop({ required: true, default: 100 })
-  public rentalCost: number;
+  public rentalCost!: number;
 
   @prop({ required: true })
   public amenities?: Amenity[];
 
   @prop({ required: true })
-  public author: User;
+  public author!: User;
 
   @prop({ required: false, default: 0 })
-  public commentsCount: number;
+  public commentsCount!: number;
 
   @prop({ required: true })
-  public coordinates: Coordinates;
-
-  constructor(offerData: Offer) {
-    super();
-    this.title = offerData.title;
-    this.description = offerData.description;
-    this.publishDate = offerData.publishDate;
-    this.city = offerData.city;
-    this.preview = offerData.preview;
-    this.photos = offerData.photos;
-    this.isPremium = offerData.isPremium;
-    this.rating = offerData.rating;
-    this.accommodationType = offerData.accommodationType;
-    this.roomsCount = offerData.roomsCount;
-    this.guestsCount = offerData.guestsCount;
-    this.rentalCost = offerData.rentalCost;
-    this.amenities = offerData.amenities;
-    this.author = offerData.author;
-    this.commentsCount = offerData.commentsCount;
-    this.coordinates = offerData.coordinates;
-  }
+  public coordinates!: Coordinates;
 }
 
 export const OfferModel = getModelForClass(OfferEntity);
